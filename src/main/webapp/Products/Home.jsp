@@ -42,11 +42,19 @@ body {
     margin: 0 auto;
     align-items: center;
     gap: 30px;
-    margin-left: 10%;
+    margin-left: 3%;
 }
 
 .menu li {
     margin-left: 20px;
+}
+
+.bnt_logout a{
+	margin-left: 200px	;
+	width: 50px;
+	border-color: black;
+	font-size: 20px;
+	text-decoration: underline;
 }
 
 .navbar a {
@@ -117,14 +125,15 @@ body {
         <a href="Home.jsp"><img src="./image/logo.jpg" alt=""></a>
         <ul class="menu">
             <li><a href="#">Trang chủ</a></li>
-            <li><a href="#">Sản phẩm</a></li>
+            <li><a href="#">Danh Sách Sản phẩm</a></li>
             <li><a href="#">Liên hệ</a></li>
             <li>
-                <form action="ProductController" method="get">
+                <form action="ProductSearch" method="get">
 				    <input type="text" name="eq" placeholder="Search Products..."/>
 				    <button type="submit">Search</button>
 				</form>
             </li>
+            <li class="bnt_logout"><a href="#">Log Out</a></li>
         </ul>
     </nav>
     
