@@ -56,8 +56,9 @@ public class ProductsList extends HttpServlet {
     	        productList.add(p);
     	    }
 
-    	    request.setAttribute("productList", productList);
-    	    request.getRequestDispatcher("Products/Home.jsp").forward(request, response);
+            request.getSession().setAttribute("productList", productList);
+
+            response.sendRedirect(request.getContextPath() + "/Products/Home.jsp");
 
     	} catch (SQLException e) {
     	    e.printStackTrace();

@@ -16,7 +16,7 @@ public class ProductSearch extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+    	request.setCharacterEncoding("UTF-8");
         String keyword = request.getParameter("product");
 
         String sql = "SELECT * FROM Products WHERE name LIKE ? COLLATE utf8mb4_unicode_ci";
@@ -43,13 +43,13 @@ public class ProductSearch extends HttpServlet {
             	        productList.add(product);
                 }
             }
-            System.out.println("Danh sách sản phẩm tìm được: " + productList.size());
+            System.out.println("Danh sách sản phẩm tìm được: " + keyword +" " + productList.size());
             for (Product p : productList) {
                 System.out.println(p.getName());
             }
-            request.setAttribute("productList", productList);
-            request.getRequestDispatcher("Products/Home.jsp").forward(request, response);
 
+            request.getSession().setAttribute("productList", productList);
+            response.sendRedirect(request.getContextPath() + "/Products/ProductSearch.jsp");
         } catch (SQLException e) {
             e.printStackTrace();
         }

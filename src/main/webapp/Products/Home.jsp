@@ -8,149 +8,105 @@
     <title>Trang chủ</title>
     <link rel="stylesheet" href="Home.css">
 </head>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    background-color: blanchedalmond;
-}
-
-.navbar {
-    width: 100%;
-    background-color: white;
-    color: white;
-    padding: 15px 30px;
-    display: flex;
-    align-items: center;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1000;
-    border-color: black;
-}
-
-.navbar img {
-    margin-right: 20px;
-    width: 50px;
-    font-weight: bold;
-}
-
-.menu {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0 auto;
-    align-items: center;
-    gap: 30px;
-    margin-left: 3%;
-}
-
-.menu li {
-    margin-left: 20px;
-}
-
-.bnt_logout a{
-	margin-left: 200px	;
-	width: 50px;
-	border-color: black;
-	font-size: 20px;
-	text-decoration: underline;
-}
-
-.navbar a {
-    font-size: 25px;
-    text-decoration: none;
-    color: black;
-    transition: color 0.3s red;
-}
-
-.navbar a:hover {
-    text-decoration: underline;
-    color: red;
-}
-
-.navbar form {
-    width: 200%
-}
-
-.navbar form button {
-    height: 35px;
-    width: 100px;
-    margin-left: 10px;
-    border-color: red;
-    transition: 0.3s color red;
-}
-
-.navbar form button:hover {
-    color: red;
-}
-
-.navbar form input {
-    width: 70%;
-    height: 30px;
-    border-radius: 20px;
-    border-color: red;
-}
-
-.content {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    margin-top: 200px; 
-    gap: 20px;
-    max-width: 90%; 
-    margin: 180px auto 0 auto; 
-  }
-
-
-.content img {
-    width: 100%;
-    height: 200px;
-    display: block;
-    object-fit: cover;
-    border-radius: 8px;
-}
-
-.item a{
-    text-decoration: none;
-    color: black;
-}
-
-.item p{
-    font-size: 20px;
-    margin-top: 10px;
-}
-</style>
 <body>
     <nav class="navbar">
-        <a href="Home.jsp"><img src="./image/logo.jpg" alt=""></a>
+        <a href="Home.jsp"><img src="${pageContext.request.contextPath}/image/logo.jpg" alt="Logo"></a>
         <ul class="menu">
-            <li><a href="#">Trang chủ</a></li>
+            <li><a href="Home.jsp">Trang chủ</a></li>
             <li><a href="#">Danh Sách Sản phẩm</a></li>
+            <li><a href="#">Đơn hàng</a></li>
             <li><a href="#">Liên hệ</a></li>
-            <li>
-                <form action="ProductSearch" method="get">
-				    <input type="text" name="eq" placeholder="Search Products..."/>
-				    <button type="submit">Search</button>
-				</form>
+            <li class="search-form"	>
+                <form action="${pageContext.request.contextPath}/ProductSearch" method="post">
+                    <input type="text" name="product" placeholder="Search Products..."/>
+                    <button type="submit">Search</button>
+                </form>
             </li>
-            <li class="bnt_logout"><a href="#">Log Out</a></li>
+            <li><a href="Cart"><img alt="" src="${pageContext.request.contextPath}/image/iconCart.jpg"></a>
+            <li class="bnt_logout"><a href="../index.jsp">Log Out</a></li>
         </ul>
-    </nav>
+    </nav>	
     
+    <h1>Giày Thể Thao</h1>
+    <div class="filter-buttons">
+        <a href="Home.jsp?category=1">Bóng đá</a>
+        <a href="Home.jsp?category=2">Bóng chuyền</a>
+        <a href="Home.jsp?category=3">Bóng rổ</a>
+        <a href="Home.jsp?category=4">Bóng futsal</a>
+    </div>
+
+    <!-- Danh sách sản phẩm -->
     <div class="content">
         <%
-            // Lấy danh sách sản phẩm từ request
-            List<Product> productList = (List<Product>) request.getAttribute("productList");
+            List<Product> productList = (List<Product>) session.getAttribute("productList");
+            String categoryParam = request.getParameter("category");
+            int selectedCategory = (categoryParam != null) ? Integer.parseInt(categoryParam) : 1;
+            
+            String shoeCategoryParam = request.getParameter("shoeCategory");
+            int selectedShoeCategory = (shoeCategoryParam != null) ? Integer.parseInt(shoeCategoryParam) : 4;
 
             if (productList != null) {
                 for (Product product : productList) {
+                    if (product.getCategoryId() == selectedCategory) {
         %>
             <div class="item">
-                <a href="#"><img src="${pageContext.request.contextPath}/image/<%= product.getThumbnail() %>" alt=""></a>
-                <a href="#"><%= product.getName() %></a>
-                <p><%= product.getPrice() %> VND</p>
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><img src="${pageContext.request.contextPath}/image/<%= product.getThumbnail() %>" alt=""></a>
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><%= product.getName() %></a>
+                <p><%= String.format("%,d", product.getPrice()) %> VND</p>
             </div>
         <%
+                    }
+                }
+            } else {
+        %>
+            <p>Không có sản phẩm để hiển thị.</p>
+        <%
+            }
+        %>
+    </div>
+    
+    <h1 class="football">Giày Thể Thao</h1>
+    <div class="filter1-buttons">
+        <a href="Home.jsp?shoeCategory=5">Giày pickleball</a>
+        <a href="Home.jsp?shoeCategory=6">Giày đá bóng</a>
+        <a href="Home.jsp?shoeCategory=7">Giày cầu lông</a>
+    </div>
+        <div class="content">
+        <%
+            if (productList != null) {
+                for (Product product : productList) {
+                    if (product.getCategoryId() == selectedShoeCategory) {
+        %>
+            <div class="item">
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><img src="${pageContext.request.contextPath}/image/<%= product.getThumbnail() %>" alt=""></a>
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><%= product.getName() %></a>
+                <p><%= String.format("%,d", product.getPrice()) %> VND</p>
+            </div>
+        <%
+                    }
+                }
+            } else {
+        %>
+            <p>Không có sản phẩm để hiển thị.</p>
+        <%
+            }
+        %>
+    </div>
+    
+    <h1>Thiết bị tập</h1>
+            <div class="content">
+        <%
+            if (productList != null) {
+                for (Product product : productList) {
+                    if (product.getCategoryId() == 8) {
+        %>
+            <div class="item">
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><img src="${pageContext.request.contextPath}/image/<%= product.getThumbnail() %>" alt=""></a>
+                <a href="ProductDetail.jsp?id=<%= product.getCode() %>"><%= product.getName() %></a>
+                <p><%= String.format("%,d", product.getPrice()) %> VND</p>
+            </div>
+        <%
+                    }
                 }
             } else {
         %>
