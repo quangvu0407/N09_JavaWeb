@@ -1,6 +1,7 @@
-package nhom9.haui.Products;
+package nhom9.haui.Model;
 
 public class Product {
+	private int id;
     private int categoryId;
     private Integer promotionId;
     private String name;
@@ -11,8 +12,9 @@ public class Product {
     private String description;
     private String createdAt;
     
-    public Product(int categoryId, Integer promotionId, String name, String code, int price, int quantity,
+    public Product(int id, int categoryId, Integer promotionId, String name, String code, int price, int quantity,
             String thumbnail, String description, String createdAt) {
+     this.id = id;
 	 this.categoryId = categoryId;
 	 this.promotionId = promotionId;
 	 this.name = name;
@@ -29,7 +31,15 @@ public class Product {
         return categoryId;
     }
 
-    public void setCategoryId(int categoryId) {
+    public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }
 

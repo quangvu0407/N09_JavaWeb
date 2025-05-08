@@ -14,20 +14,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import nhom9.haui.Model.Admin;
 import nhom9.haui.Model.Product;
+import nhom9.haui.Model.Users;
 import nhom9.haui.jdbc.ConnectJDBC;
 
 /**
- * Servlet implementation class StudentList
+ * Servlet implementation class ProductUser
  */
-@WebServlet("/ProductList")
-public class ProductsList extends HttpServlet {
+@WebServlet("/ProductUser")
+public class ProductUser extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ProductsList() {
+    public ProductUser() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,35 +38,38 @@ public class ProductsList extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	List<Product> productList = new ArrayList<>();
-
+    	List<Users> userList = new ArrayList<>();
+    	List<Admin> adminList = new ArrayList<>();
     	try (Connection cnn = new ConnectJDBC().getConnection();
-    	     PreparedStatement pst = cnn.prepareStatement("SELECT * FROM Products");
+    	     PreparedStatement pst = cnn.prepareStatement("SELECT * FROM Users");
     	     ResultSet rs = pst.executeQuery()) {
 
     	    while (rs.next()) {
-    	        Product p = new Product(
+    	        Users p = new Users(
     	        	rs.getInt("id"),
-    	            rs.getInt("category_id"),
-    	            rs.getObject("promotion_id") != null ? rs.getInt("promotion_id") : null,
-    	            rs.getString("name"),
-    	            rs.getString("code"),
-    	            rs.getInt("price"),
-    	            rs.getInt("quantity"),
-    	            rs.getString("thumbnail"),
-    	            rs.getString("description"),
-    	            rs.getString("created_at")
+    	            rs.getString("username"),
+    	            rs.getString("email"),
+    	            rs.getString("password")
     	        );
-    	        productList.add(p);
+    	        userList.add(p);
     	    }
 
-            request.getSession().setAttribute("productList", productList);
+            request.getSession().setAttribute("userList", userList);
 
-            response.sendRedirect(request.getContextPath() + "/Products/Home.jsp");
+            response.sendRedirect(request.getContextPath() + "/Products/Login.jsp");
 
     	} catch (SQLException e) {
     	    e.printStackTrace();
     	    response.getWriter().println("Lỗi khi truy vấn CSDL!");
     	}
     }
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		doGet(request, response);
+	}
+
 }

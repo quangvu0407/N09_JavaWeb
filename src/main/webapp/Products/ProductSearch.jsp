@@ -1,5 +1,5 @@
 <%@ page import="java.util.List"%>
-<%@ page import="nhom9.haui.Products.Product"%>
+<%@ page import="nhom9.haui.Model.Product"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -13,9 +13,17 @@
 	<nav class="navbar">
 		<a href="Home.jsp"><img
 			src="${pageContext.request.contextPath}/image/logo.jpg" alt="Logo"></a>
-		<ul class="menu">	
-			<li><a href="${pageContext.request.contextPath}/ProductList">Trang chủ</a></li>
+		<ul class="menu">
+			<li><a href="${pageContext.request.contextPath}/ProductList">Trang
+					chủ</a></li>
+			<%
+			nhom9.haui.Model.Admin admin = (nhom9.haui.Model.Admin) session.getAttribute("admin");
+			if (admin != null) {
+			%>
 			<li><a href="#">Danh Sách Sản phẩm</a></li>
+			<%
+			}
+			%>
 			<li><a href="#">Đơn hàng</a></li>
 			<li><a href="#">Liên hệ</a></li>
 			<li class="search-form">
@@ -26,7 +34,7 @@
 				</form>
 			</li>
 			<li><a href="Cart"><img alt=""
-src="${pageContext.request.contextPath}/image/iconCart.jpg"></a>
+					src="${pageContext.request.contextPath}/image/iconCart.jpg"></a>
 			<li class="bnt_logout"><a href="../index.jsp">Log Out</a></li>
 		</ul>
 	</nav>

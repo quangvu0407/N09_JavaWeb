@@ -91,6 +91,26 @@ body {
 	border-color: red;
 }
 
-.container{
+.container {
 	border: 1px solid var(--bs-primary-border-subtle);
+}
+
+.counter-container {
+	display: flex;
+	justify-content: flex-start;
+	gap: 10px;
+	font-size: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+button {
+	padding: 0px 20px;
+	font-size: 5px;
+	cursor: pointer;
+}
+
+.number-display {
+	width: 60px;
+	text-align: center;
 }

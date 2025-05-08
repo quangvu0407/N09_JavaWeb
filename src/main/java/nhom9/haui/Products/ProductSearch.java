@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+
+import nhom9.haui.Model.Product;
 import nhom9.haui.jdbc.ConnectJDBC;
 
 @WebServlet("/ProductSearch")
@@ -29,7 +31,8 @@ public class ProductSearch extends HttpServlet {
 
             try (ResultSet rs = pst.executeQuery()) {
                 while (rs.next()) {
-                    Product product = new Product(                    
+                    Product product = new Product(
+                    		rs.getInt("id"),
             	            rs.getInt("category_id"),
             	            rs.getObject("promotion_id") != null ? rs.getInt("promotion_id") : null,
             	            rs.getString("name"),

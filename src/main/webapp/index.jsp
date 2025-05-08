@@ -103,7 +103,7 @@
     <div class="button-container">
         <button class="button" onclick="alert('Chuyển đến trang Đăng ký')">Đăng ký</button>
         <!-- Dùng JavaScript để chuyển trang -->
-        <button class="button" onclick="alert('login')">Đăng nhập</button>
+        <button class="button" onclick="window.location.href='${pageContext.request.contextPath}/Products/Login.jsp';">Đăng nhập</button>
     </div>
 </body>
 
