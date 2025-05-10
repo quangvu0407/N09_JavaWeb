@@ -167,7 +167,11 @@ function showOrderForm() {
 			nhom9.haui.Model.Admin admin = (nhom9.haui.Model.Admin) session.getAttribute("admin");
 			if (admin != null) {
 			%>
-			<li><a href="#">Danh Sách Sản phẩm</a></li>
+			<li class="dropdown"><a href="#">Sản phẩm</a>
+				<ul class="dropdown-content">
+					<li><a href="${pageContext.request.contextPath}/Products/ProductCatage">Danh sách sản phẩm</a></li>
+					<li><a href="CategoryList.jsp">Danh mục sản phẩm</a></li>
+				</ul></li>
 			<%
 			}
 			%>
