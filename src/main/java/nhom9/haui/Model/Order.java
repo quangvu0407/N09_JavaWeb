@@ -11,9 +11,11 @@ public class Order {
     private Date orderDate;
     private int total;
     private int paidAmount;
+    private String name;
+    private int quantity;
 
     // Constructor
-    public Order(int id, String customerName, String email, String phone, String address, Date orderDate, int total, int paidAmount) {
+    public Order(int id, String customerName, String email, String phone, String address, Date orderDate, int total, int paidAmount, String name, int quantity) {
         this.id = id;
         this.customerName = customerName;
         this.email = email;
@@ -22,6 +24,8 @@ public class Order {
         this.orderDate = orderDate;
         this.total = total;
         this.paidAmount = paidAmount;
+        this.name = name;
+        this.quantity = quantity;
     }
 
     // Getter and Setter Methods
@@ -89,7 +93,23 @@ public class Order {
         this.paidAmount = paidAmount;
     }
 
-    @Override
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	@Override
     public String toString() {
         return "Order [id=" + id + ", customerName=" + customerName + ", email=" + email + ", phone=" + phone
                 + ", address=" + address + ", orderDate=" + orderDate + ", total=" + total + ", paidAmount="

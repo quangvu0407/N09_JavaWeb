@@ -49,7 +49,9 @@ public class ProductUser extends HttpServlet {
     	        	rs.getInt("id"),
     	            rs.getString("username"),
     	            rs.getString("email"),
-    	            rs.getString("password")
+    	            rs.getString("password"),
+    	            rs.getString("phone"),
+    	            rs.getString("address")
     	        );
     	        userList.add(p);
     	    }

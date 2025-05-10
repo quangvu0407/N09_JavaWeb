@@ -5,17 +5,21 @@ public class Admin {
     private String username;
     private String email;
     private String password;
+    private String phone;
+    private String address;
     private int level; // 0 = staff, 1 = super admin
 
     // Constructors
     public Admin() {
     }
 
-    public Admin(int id, String username, String email, String password, int level) {
+    public Admin(int id, String username, String email, String password, String phone, String address, int level) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+        this.address = address;
         this.level = level;
     }
 
@@ -52,6 +56,22 @@ public class Admin {
         this.password = password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public int getLevel() {
         return level;
     }
@@ -60,13 +80,14 @@ public class Admin {
         this.level = level;
     }
 
-    // Optional: Display method
     @Override
     public String toString() {
         return "Admin{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
                 ", level=" + level +
                 '}';
     }

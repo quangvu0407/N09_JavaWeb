@@ -5,8 +5,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,7 +17,7 @@ import nhom9.haui.Model.Users;
 import nhom9.haui.Model.Admin;
 import nhom9.haui.jdbc.ConnectJDBC;
 
-@WebServlet("/Products/ProductLogin")
+@WebServlet("/ProductLogin")
 public class ProductLogin extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -27,15 +25,18 @@ public class ProductLogin extends HttpServlet {
         super();
     }
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username"); // email
-        String password = request.getParameter("password");
-        List<Product> productList = new ArrayList<>();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    	String username = null;
+    	String password = null;
+        username = request.getParameter("username");
+        password = request.getParameter("password");
 
         try (Connection cnn = new ConnectJDBC().getConnection()) {
 
-            // Check Users table
-            try (PreparedStatement pst = cnn.prepareStatement("SELECT * FROM Users WHERE email = ? AND password = ?")) {
+            // Kiểm tra trong bảng Users
+            try (PreparedStatement pst = cnn.prepareStatement(
+                    "SELECT * FROM Users WHERE email = ? AND password = ?")) {
                 pst.setString(1, username);
                 pst.setString(2, password);
 
@@ -45,7 +46,9 @@ public class ProductLogin extends HttpServlet {
                             rs.getInt("id"),
                             rs.getString("username"),
                             rs.getString("email"),
-                            rs.getString("password")
+                            rs.getString("password"),
+                            rs.getString("phone"),
+                            rs.getString("address")
                         );
                         request.getSession().setAttribute("user", user);
                         response.sendRedirect(request.getContextPath() + "/ProductList");
@@ -54,8 +57,9 @@ public class ProductLogin extends HttpServlet {
                 }
             }
 
-            // Check Admins table
-            try (PreparedStatement pst = cnn.prepareStatement("SELECT * FROM Admins WHERE email = ? AND password = ?")) {
+            // Kiểm tra trong bảng Admins
+            try (PreparedStatement pst = cnn.prepareStatement(
+                    "SELECT * FROM Admins WHERE email = ? AND password = ?")) {
                 pst.setString(1, username);
                 pst.setString(2, password);
 
@@ -66,6 +70,8 @@ public class ProductLogin extends HttpServlet {
                             rs.getString("username"),
                             rs.getString("email"),
                             rs.getString("password"),
+                            rs.getString("phone"),
+                            rs.getString("address"),
                             rs.getInt("level")
                         );
                         request.getSession().setAttribute("admin", admin);
@@ -75,9 +81,9 @@ public class ProductLogin extends HttpServlet {
                 }
             }
 
-            // Nếu không đúng cả Users và Admins
+            // Sai tài khoản hoặc mật khẩu
             request.setAttribute("error", "Sai tài khoản hoặc mật khẩu!");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            response.sendRedirect(request.getContextPath() + "/Products/Login.jsp");
 
         } catch (SQLException e) {
             e.printStackTrace();

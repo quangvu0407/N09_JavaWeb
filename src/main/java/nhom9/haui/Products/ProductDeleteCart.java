@@ -48,7 +48,7 @@ public class ProductDeleteCart extends HttpServlet {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			response.getWriter().println("Lỗi khi thêm sản phẩm vào giỏ hàng!");
+			response.getWriter().println("Lỗi khi xóa sản phẩm vào giỏ hàng!");
 		}
 	}
 

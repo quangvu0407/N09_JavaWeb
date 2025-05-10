@@ -5,17 +5,21 @@ public class Users {
     private String username;
     private String email;
     private String password;
+    private String phone;
+    private String address;
 
     // Constructor mặc định
     public Users() {
     }
 
     // Constructor đầy đủ
-    public Users(int id, String username, String email, String password) {
+    public Users(int id, String username, String email, String password, String phone, String address) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.phone = phone;
+        this.address = address;
     }
 
     // Getter và Setter
@@ -51,6 +55,22 @@ public class Users {
         this.password = password;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     // Tùy chọn: phương thức toString()
     @Override
     public String toString() {
@@ -59,6 +79,8 @@ public class Users {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
                 '}';
     }
 }

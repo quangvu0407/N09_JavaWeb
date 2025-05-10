@@ -15,39 +15,44 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import nhom9.haui.Model.Product;
-import nhom9.haui.Model.Promotions;  // Import model Promotions
+import nhom9.haui.Model.Promotions;
 import nhom9.haui.jdbc.ConnectJDBC;
 
 /**
- * Servlet implementation class ProductsList
+ * Servlet implementation class ProductCatage
  */
-@WebServlet("/ProductList")
-public class ProductsList extends HttpServlet {
+@WebServlet("/Products/ProductCatage")
+public class ProductCatage extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public ProductsList() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
-
-    /**
-     * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-     */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	request.getSession().removeAttribute("productList");
         List<Product> productList = new ArrayList<>();
+
+        // Lấy tham số page từ request, nếu không có sẽ mặc định là 1
+        int page = 1;
+        int recordsPerPage = 12; // Số sản phẩm trên mỗi trang
+
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+
+        // Tính toán offset
+        int offset = (page - 1) * recordsPerPage;
 
         try (Connection cnn = new ConnectJDBC().getConnection();
              PreparedStatement pst = cnn.prepareStatement(
                      "SELECT p.*, pr.* FROM Products p " +
-                     "LEFT JOIN Promotions pr ON p.promotion_id = pr.id");
-             ResultSet rs = pst.executeQuery()) {
+                             "LEFT JOIN Promotions pr ON p.promotion_id = pr.id " +
+                             "LIMIT ? OFFSET ?")) {
 
+            // Thêm LIMIT và OFFSET vào câu truy vấn SQL
+            pst.setInt(1, recordsPerPage);
+            pst.setInt(2, offset);
+
+            ResultSet rs = pst.executeQuery();
+
+            // Lấy danh sách sản phẩm từ CSDL
             while (rs.next()) {
-                // Lấy thông tin từ bảng Products
                 Product p = new Product(
                         rs.getInt("id"),
                         rs.getInt("category_id"),
@@ -61,7 +66,7 @@ public class ProductsList extends HttpServlet {
                         rs.getString("created_at")
                 );
 
-                // Lấy thông tin từ bảng Promotions nếu có
+                // Lấy thông tin khuyến mãi nếu có
                 if (rs.getObject("promotion_id") != null) {
                     Promotions promotion = new Promotions(
                             rs.getInt("promotion_id"),
@@ -77,11 +82,24 @@ public class ProductsList extends HttpServlet {
                 productList.add(p);
             }
 
-            // Lưu danh sách sản phẩm vào session
-            request.getSession().setAttribute("productList", productList);
+            // Lấy tổng số sản phẩm để tính tổng số trang
+            PreparedStatement countStmt = cnn.prepareStatement("SELECT COUNT(*) FROM Products");
+            ResultSet countRs = countStmt.executeQuery();
+            int totalRecords = 0;
+            if (countRs.next()) {
+                totalRecords = countRs.getInt(1);
+            }
 
-            // Chuyển hướng tới trang Home.jsp
-            response.sendRedirect(request.getContextPath() + "/Products/Home.jsp");
+            // Tính toán tổng số trang
+            int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+            // Lưu danh sách sản phẩm và thông tin phân trang vào request
+            request.setAttribute("productList", productList);
+            request.setAttribute("currentPage", page);
+            request.setAttribute("totalPages", totalPages);
+
+            // Chuyển hướng đến trang ProductCatage.jsp
+            request.getRequestDispatcher("/Products/ProductCatage.jsp").forward(request, response);
 
         } catch (SQLException e) {
             e.printStackTrace();

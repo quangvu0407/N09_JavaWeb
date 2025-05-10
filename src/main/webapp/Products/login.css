@@ -89,6 +89,23 @@ input:focus {
     color: #e5e5e5;
 }
 
+.register-wrapper {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.register-link {
+    font-size: 16px;
+    color: #00bfff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+    color: #0091c2;
+}
+
 button {
     margin-top: 40px;
     margin-bottom: 15px;
